@@ -1,0 +1,15 @@
+scikit-learn==1.3.0
+pymongo
+pandas
+pandas_ta
+numpy
+polygon-api-client
+fastapi
+pydantic
+uvicorn
+python-dotenv
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch 
+torchvision 
+torchaudio
