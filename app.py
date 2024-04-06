@@ -40,7 +40,6 @@ polygon_client = RESTClient(os.getenv("POLYGON_IO_API_KEY"))
 mongoDB_client = pymongo.MongoClient(os.getenv("MONGODB_URI"))
 db = mongoDB_client[os.getenv("MONGODB_DATABASE_NAME")]
 
-
 @app.post("/tradeSignal/", status_code=201)
 async def getTradeSignal(body: Ticker):
     ticker = body.ticker
