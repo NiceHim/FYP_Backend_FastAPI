@@ -1,0 +1,28 @@
+name: CICD
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: self-hosted-4
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Add the environment file
+      run: |
+        touch .env
+        echo "${{ secrets.ENV }}" > .env
+    - name: Remove Old Docker image
+      run: docker rmi $(docker images | grep 'fyp_backend_fastapi_image') || true
+    - name: Build the Docker image
+      run: docker build -t fyp_backend_fastapi_image .
+    - name: Stop Docker Container
+      run: docker stop fyp_backend_fastapi_container || true
+    - name: Remove Old Docker Container
+      run: docker rm fyp_backend_fastapi_container || true
+    - name: Depoly to Docker Container
+      run: docker run -d --net fyp-net --add-host=host.docker.internal:host-gateway --restart always -p 8000:8000 --name fyp_backend_fastapi_container fyp_backend_fastapi_image
