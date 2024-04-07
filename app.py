@@ -5,7 +5,7 @@ import pandas_ta as ta
 import numpy as np
 import torch
 from DRQN_GRU import DRQN_GRU
-from datetime import datetime
+from datetime import datetime, timedelta
 from polygon import RESTClient
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -67,7 +67,7 @@ async def getTradeSignal(body: Ticker):
     df = pd.DataFrame(data)
     
     aggs = polygon_client.get_previous_close_agg(f"C:{ticker}")
-    previous_close_datetime = datetime.fromtimestamp(round(aggs[0].timestamp / 1000))
+    previous_close_datetime = datetime.fromtimestamp(round((datetime.fromtimestamp(aggs[0].timestamp/1000) - timedelta(days=1)).timestamp()))
     previous_close = [{
         "ticker": aggs[0].ticker.replace("C:", ""),
         "timestamp": pd.Timestamp(previous_close_datetime),
